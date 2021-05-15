@@ -38,7 +38,7 @@ const cube3 = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshBasicMaterial({ color: 'blue' })
 );
-cube3.position.set(-1, 0, 0);
+cube3.position.set(0, 0, 1);
 group.add(cube3);
 
 // group.rotation.set(0, 0.7, 0);
@@ -51,11 +51,38 @@ scene.add(axesHelper);
 
 //Canvas
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 };
+
+window.addEventListener('resize', () => {
+    //Update Sizes
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+    //Update Camera
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+    //Update Renderer
+    renderer.setSize(sizes.width, sizes.height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+});
 const canvas = document.querySelector('.webgl');
 
+window.addEventListener('dblclick', () => {
+    const fullScreen = document.fullscreenElement || document.webkitFullscreenElement;
+    if (!fullScreen) {
+        if (canvas.requestFullscreen)
+            canvas.requestFullscreen();
+        else if (canvas.webkitRequestFullscreen)
+            canvas.webkitRequestFullscreen();
+    } else {
+        if (document.exitFullscreen)
+            document.exitFullscreen();
+        else if (document.webkitExitFullscreen)
+            canvas.webkitExitFullscreen();
+    }
+});
 
 //Camera
 const camera = new THREE.PerspectiveCamera(60, sizes.width / sizes.height, 0.001, 100);
@@ -79,7 +106,7 @@ const renderer = new THREE.WebGLRenderer({
     canvas
 });
 renderer.setSize(sizes.width, sizes.height);
-
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 //DeltaTime
 const clock = new THREE.Clock();
 
