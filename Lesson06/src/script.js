@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
-import { Scene } from 'three';
+import gsap from 'gsap'
+
 
 const scene = new THREE.Scene();
 
@@ -54,4 +55,34 @@ const renderer = new THREE.WebGLRenderer({
 });
 
 renderer.setSize(sizes.width, sizes.height);
-renderer.render(scene, camera);
+
+//Clock
+const clock = new THREE.Clock();
+
+//GSAP
+gsap.to(cube1.position, { duration: 2, delay: 1, y: 1 });
+gsap.to(cube1.position, { duration: 2, delay: 3, y: 0 });
+gsap.to(cube1.position, { duration: 2, delay: 5, y: 1 });
+
+//Animations
+const Anime = () => {
+
+
+
+    //Clock
+    const elapsedTime = clock.getElapsedTime();
+
+    //Update
+
+    cube1.rotation.y += 0.01;
+    cube2.rotation.x += 0.01;
+    cube3.rotation.x -= 0.01;
+    group.rotation.z = Math.sin(elapsedTime * Math.PI);
+
+    //Render
+    renderer.render(scene, camera);
+
+    window.requestAnimationFrame(Anime);
+}
+
+Anime();
