@@ -2,51 +2,69 @@ import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-//Cursor
-const cursos = {
-    x: 0,
-    y: 0
-};
-
-window.addEventListener('mousemove', (event) => {
-    cursos.x = event.clientX / sizes.width - 0.5;
-    cursos.y = event.clientY / sizes.height - 0.5;
-});
-
 //Scene
 const scene = new THREE.Scene();
 
 
 //Objects
-const group = new THREE.Group();
+const geometry = new THREE.BufferGeometry();
+const vertices = [
+    { pos: [0, 0, 0] },
+    { pos: [0, 1, 0] },
+    { pos: [1, 0, 0] },
+];
+const positions = [];
+for (const vertex of vertices) {
+    positions.push(...vertex.pos);
+}
+geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(positions), 3));
 
-const cube1 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 'green' })
-);
-cube1.position.set(0, 1, 0);
-group.add(cube1);
+// const vertex1 = new THREE.Vector3(0, 0, 0);
+// geometry.push(vertex1);
+// const vertex2 = new THREE.Vector3(0, 1, 0);
+// geometry.vertices.push(vertex2);
+// const vertex3 = new THREE.Vector3(1, 0, 0);
+// geometry.vertices.push(vertex3);
 
-const cube2 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 'red' })
-);
-cube2.position.set(1, 0, 0);
-group.add(cube2);
+// const face = new THREE.Face3(0, 1, 2);
+// geometry.faces.push(face);
 
-const cube3 = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 'blue' })
-);
-cube3.position.set(0, 0, 1);
-group.add(cube3);
+const material = new THREE.MeshBasicMaterial({
+    color: 'red',
+    wireframe: true
+})
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
+// const group = new THREE.Group();
+
+// const cube1 = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1),
+//     new THREE.MeshBasicMaterial({ color: 'green' })
+// );
+// cube1.position.set(0, 1, 0);
+// group.add(cube1);
+
+// const cube2 = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1),
+//     new THREE.MeshBasicMaterial({ color: 'red' })
+// );
+// cube2.position.set(1, 0, 0);
+// group.add(cube2);
+
+// const cube3 = new THREE.Mesh(
+//     new THREE.BoxGeometry(1, 1, 1),
+//     new THREE.MeshBasicMaterial({ color: 'blue' })
+// );
+// cube3.position.set(0, 0, 1);
+// group.add(cube3);
+
 
 // group.rotation.set(0, 0.7, 0);
-scene.add(group);
+// scene.add(group);
 
 //Axes
-const axesHelper = new THREE.AxesHelper(4);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(4);
+// scene.add(axesHelper);
 
 
 //Canvas
@@ -83,6 +101,16 @@ window.addEventListener('dblclick', () => {
             canvas.webkitExitFullscreen();
     }
 });
+//Cursor
+const cursos = {
+    x: 0,
+    y: 0
+};
+
+window.addEventListener('mousemove', (event) => {
+    cursos.x = event.clientX / sizes.width - 0.5;
+    cursos.y = event.clientY / sizes.height - 0.5;
+});
 
 //Camera
 const camera = new THREE.PerspectiveCamera(60, sizes.width / sizes.height, 0.001, 100);
@@ -92,7 +120,7 @@ const camera = new THREE.PerspectiveCamera(60, sizes.width / sizes.height, 0.001
 camera.position.z = 3;
 // camera.position.y = 3;
 // camera.position.x = 3;
-camera.lookAt(group.position);
+camera.lookAt(mesh);
 scene.add(camera);
 
 //Controls
