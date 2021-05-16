@@ -22,21 +22,30 @@ const group = new THREE.Group();
 
 const cube1 = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 'green' })
+    new THREE.MeshBasicMaterial({
+        color: 'green',
+        wireframe: true
+    })
 );
 cube1.position.set(0, 1, 0);
 group.add(cube1);
 
 const cube2 = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 'red' })
+    new THREE.MeshBasicMaterial({
+        color: 'red',
+        wireframe: true
+    })
 );
 cube2.position.set(1, 0, 0);
 group.add(cube2);
 
 const cube3 = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial({ color: 'blue' })
+    new THREE.MeshBasicMaterial({
+        color: 'blue',
+        wireframe: true
+    })
 );
 cube3.position.set(0, 0, 1);
 group.add(cube3);
@@ -115,18 +124,14 @@ const Animation = () => {
     const deltaTime = clock.getElapsedTime();
 
     //update camera
-    // camera.position.x = Math.sin(cursos.x * Math.PI * 2) * 5;
-    // camera.position.z = Math.cos(cursos.x * Math.PI * 2) * 5;
-    // camera.position.y = cursos.y * 10;
-    // camera.lookAt(new THREE.Vector3());
 
     //Update Controls
     controls.update();
 
-    // group.rotation.y = Math.cos(deltaTime * Math.PI * 1);
-    // cube1.rotation.y = Math.sin(deltaTime * Math.PI * 4);
-    // cube2.rotation.x = Math.sin(-deltaTime * Math.PI * 4);
-    // cube3.rotation.x = Math.sin(deltaTime * Math.PI * 4);
+    group.rotation.y = Math.cos(deltaTime * Math.PI * 1);
+    cube1.rotation.y = Math.sin(deltaTime * Math.PI * 4);
+    cube2.rotation.x = Math.sin(-deltaTime * Math.PI * 4);
+    cube3.rotation.x = Math.sin(deltaTime * Math.PI * 4);
 
     renderer.render(scene, camera);
     window.requestAnimationFrame(Animation);
