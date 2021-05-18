@@ -12,6 +12,95 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+/**
+ * Textures
+ */
+const textureLoader = new THREE.TextureLoader()
+
+const doorColorTexture = textureLoader.load('/textures/door/color.jpg')
+const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg')
+const doorAmbientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg')
+const doorHeightTexture = textureLoader.load('/textures/door/height.jpg')
+const doorNormalTexture = textureLoader.load('/textures/door/normal.jpg')
+const doorMetalnessTexture = textureLoader.load('/textures/door/metalness.jpg')
+const doorRoughnessTexture = textureLoader.load('/textures/door/roughness.jpg')
+const matcapTexture = textureLoader.load('/textures/matcaps/8.png')
+const gradientTexture = textureLoader.load('/textures/gradients/3.jpg')
+
+/**
+ * Objects
+ */
+// const material = new THREE.MeshBasicMaterial()
+// const material = new THREE.MeshNormalMaterial()
+// const material = new THREE.MeshMatcapMaterial()
+// const material = new THREE.MeshDepthMaterial()
+// const material = new THREE.MeshLambertMaterial()
+const material = new THREE.MeshStandardMaterial()
+    // material.matcap = matcapTexture
+material.map = doorColorTexture
+    // material.color = new THREE.Color('white')
+    // material.wireframe = true
+material.transparent = true
+    // material.opacity = 0.5
+material.alphaMap = doorAlphaTexture
+material.side = THREE.DoubleSide
+material.metalness = 0
+material.metalnessMap = doorMetalnessTexture
+material.roughness = 1
+material.roughnessMap = doorRoughnessTexture
+material.normalMap = doorNormalTexture
+    // material.flatShading = true
+material.aoMap = doorAmbientOcclusionTexture
+material.aoMapIntensity = 1
+material.displacementMap = doorHeightTexture
+material.displacementScale = 0.05
+
+const sphere = new THREE.Mesh(
+    new THREE.SphereBufferGeometry(0.5, 64, 64),
+    material
+)
+sphere.position.x = -1.5
+
+const plane = new THREE.Mesh(
+    new THREE.PlaneBufferGeometry(1, 1, 100, 100),
+    material
+)
+
+const torus = new THREE.Mesh(
+    new THREE.TorusBufferGeometry(0.3, 0.2, 64, 128),
+    material
+)
+torus.position.x = 1.5
+
+sphere.geometry.setAttribute(
+    'uv2',
+    new THREE.BufferAttribute(
+        sphere.geometry.attributes.uv.array, 2
+    )
+)
+plane.geometry.setAttribute(
+    'uv2',
+    new THREE.BufferAttribute(
+        plane.geometry.attributes.uv.array, 2)
+)
+torus.geometry.setAttribute(
+    'uv2',
+    new THREE.BufferAttribute(
+        torus.geometry.attributes.uv.array, 2)
+)
+
+scene.add(sphere, plane, torus)
+
+/**
+ * Lights
+ */
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+scene.add(ambientLight)
+const pointLight = new THREE.PointLight(0xffffff, 0.5)
+pointLight.position.x = 2
+pointLight.position.y = 3
+pointLight.position.z = 4
+scene.add(pointLight)
 
 
 /**
@@ -59,12 +148,35 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+
 /**
  * Animate
  */
+const clock = new THREE.Clock()
 
+const tick = () => {
+    const elapsedTime = clock.getElapsedTime()
 
-/**
- * Debug
- */
+    // Update objects
+    sphere.rotation.y = 0.1 * elapsedTime
+    plane.rotation.y = 0.1 * elapsedTime
+    torus.rotation.y = 0.1 * elapsedTime
+
+    sphere.rotation.x = 0.15 * elapsedTime
+    plane.rotation.x = 0.15 * elapsedTime
+    torus.rotation.x = 0.15 * elapsedTime
+
+    controls.update();
+    renderer.render(scene, camera)
+    window.requestAnimationFrame(tick);
+
+}
+
+tick()
+    /**
+     * Debug
+     */
 const gui = new dat.GUI()
+gui.add(material, 'metalness').min(0).max(1).step(0.0001)
+gui.add(material, 'roughness').min(0).max(1).step(0.0001)
+gui.add(material, 'aoMapIntensity').min(0).max(1).step(0.0001)
