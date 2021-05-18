@@ -3,7 +3,32 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import gsap from 'gsap';
 import * as dat from 'dat.gui';
-import { Mesh } from 'three';
+
+//Textures
+const loadingManager = new THREE.LoadingManager();
+loadingManager.onStart = () => {
+    console.log('start');
+}
+loadingManager.onLoad = () => {
+    console.log('loaded');
+
+}
+loadingManager.onProgress = () => {
+    console.log('progress');
+
+}
+loadingManager.onError = () => {
+    console.log('error');
+
+}
+const textureLoader = new THREE.TextureLoader(loadingManager);
+const colorTexture = textureLoader.load('/textures/door/color.jpg');
+const alphaTexture = textureLoader.load('/textures/door/alpha.jpg');
+const normalTexture = textureLoader.load('/textures/door/normal.jpg');
+const heightTexture = textureLoader.load('/textures/door/height.jpg');
+const ambientOcclusionTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg');
+const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
+const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
 
 //Debug UI
 const gui = new dat.GUI({ closed: true });
@@ -33,8 +58,7 @@ const group = new THREE.Group();
 const cube1 = new THREE.Mesh(
     new THREE.BoxGeometry(1, 1, 1),
     new THREE.MeshBasicMaterial({
-        color: '#008000',
-        wireframe: true
+        map: colorTexture,
     })
 );
 cube1.position.set(0, 1, 0);
