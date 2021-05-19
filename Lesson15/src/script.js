@@ -113,21 +113,21 @@ plane.position.y = -0.5
 plane.receiveShadow = true
 scene.add(sphere, plane)
 
-const sphereShadow = new THREE.Mesh(
-    new THREE.PlaneBufferGeometry(1.5, 1.5, 1.5),
-    new THREE.MeshBasicMaterial({
-        color: 0x000000,
-        alphaMap: simpleShadow,
-        transparent: true
+// const sphereShadow = new THREE.Mesh(
+//     new THREE.PlaneBufferGeometry(1.5, 1.5, 1.5),
+//     new THREE.MeshBasicMaterial({
+//         color: 0x000000,
+//         alphaMap: simpleShadow,
+//         transparent: true
 
-    })
-)
-sphereShadow.rotation.x = -Math.PI * 0.5
-sphereShadow.position.y = plane.position.y + 0.01
-scene.add(sphereShadow)
-    /**
-     * Sizes
-     */
+//     })
+// )
+// sphereShadow.rotation.x = -Math.PI * 0.5
+// sphereShadow.position.y = plane.position.y + 0.01
+// scene.add(sphereShadow)
+/**
+ * Sizes
+ */
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
@@ -170,7 +170,7 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
-renderer.shadowMap.enabled = false
+renderer.shadowMap.enabled = true
     // renderer.shadowMap.type = THREE.PCFSoftShadowMap
 
 /**
@@ -190,10 +190,10 @@ const tick = () => {
     sphere.position.y = Math.abs(Math.sin(elapsedTime * 3))
 
     // Update the shadow
-    sphereShadow.position.x = sphere.position.x
-    sphereShadow.position.z = sphere.position.z
-    sphereShadow.material.opacity = Math.abs(Math.cos(elapsedTime * 3) * 0.3)
-        // Render
+    // sphereShadow.position.x = sphere.position.x
+    // sphereShadow.position.z = sphere.position.z
+    // sphereShadow.material.opacity = Math.abs(Math.cos(elapsedTime * 3) * 0.3)
+    // Render
     renderer.render(scene, camera)
 
     // Call tick again on the next frame
